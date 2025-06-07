@@ -5,26 +5,32 @@ import { RoomCard } from './RoomCard';
 import { getRooms } from '@/services/api';
 import type { Room } from '@/services/api';
 
-export function RoomGrid() {
-  const [rooms, setRooms] = useState<Room[]>([]);
-  const [loading, setLoading] = useState(true);
+interface RoomGridProps {
+  initialRooms?: Room[];
+}
+
+export function RoomGrid({ initialRooms }: RoomGridProps) {
+  const [rooms, setRooms] = useState<Room[]>(initialRooms || []);
+  const [loading, setLoading] = useState(!initialRooms);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchRooms = async () => {
-      try {
-        const data = await getRooms();
-        setRooms(data);
-      } catch (err) {
-        setError('Error al cargar las habitaciones');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!initialRooms) {
+      const fetchRooms = async () => {
+        try {
+          const data = await getRooms();
+          setRooms(data);
+        } catch (err) {
+          setError('Error al cargar las habitaciones');
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
+      };
 
-    fetchRooms();
-  }, []);
+      fetchRooms();
+    }
+  }, [initialRooms]);
 
   if (loading) {
     return (

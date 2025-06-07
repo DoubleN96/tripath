@@ -3,8 +3,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { Room, getRooms } from '@/services/api';
 
-export function SearchBar() {
+interface SearchBarProps {
+  onSearch: (rooms: Room[]) => void;
+}
+
+export function SearchBar({ onSearch }: SearchBarProps) {
   const router = useRouter();
   const [searchParams, setSearchParams] = useState({
     location: '',
@@ -13,10 +18,24 @@ export function SearchBar() {
     guests: '1',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const queryString = new URLSearchParams(searchParams).toString();
-    router.push(`/search?${queryString}`);
+    try {
+      const params: { [key: string]: string } = {};
+      if (searchParams.location) params.location = searchParams.location;
+      if (searchParams.checkIn) params.checkIn = searchParams.checkIn;
+      if (searchParams.checkOut) params.checkOut = searchParams.checkOut;
+      if (searchParams.guests) params.guests = searchParams.guests;
+
+      const data = await getRooms(params);
+      onSearch(data);
+
+      const queryString = new URLSearchParams(searchParams).toString();
+      router.push(`/search?${queryString}`);
+
+    } catch (error) {
+      console.error("Error al buscar habitaciones:", error);
+    }
   };
 
   return (
