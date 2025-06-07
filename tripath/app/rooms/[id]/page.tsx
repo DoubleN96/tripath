@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -10,7 +11,6 @@ import type { Room } from '@/services/api'
 export default function RoomPage({ params }: { params: { id: string } }) {
   const [room, setRoom] = useState<Room | null>(null)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchRoom = async () => {
@@ -18,8 +18,8 @@ export default function RoomPage({ params }: { params: { id: string } }) {
         const data = await getRoom(params.id)
         setRoom(data)
       } catch (err) {
-        setError('Error al cargar la habitación')
-        console.error(err)
+        console.error('Error fetching room, triggering notFound:', err)
+        notFound()
       } finally {
         setLoading(false)
       }
@@ -36,12 +36,15 @@ export default function RoomPage({ params }: { params: { id: string } }) {
     )
   }
 
-  if (error || !room) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-red-600">{error || 'Habitación no encontrada'}</p>
-      </div>
-    )
+  if (!room) {
+    // This is a safeguard. If loading is complete and room is null,
+    // and notFound() hasn't been called via the catch block,
+    // this will ensure a 404 is shown.
+    // Note: Given getRoom throws on error, the catch block is the expected path to notFound().
+    notFound()
+    // It's good practice to return null or an empty fragment if notFound() is called,
+    // to stop further rendering attempts by this component, although Next.js should handle it.
+    return null
   }
 
   return (
