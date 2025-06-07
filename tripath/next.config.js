@@ -7,14 +7,6 @@ const nextConfig = {
   experimental: {
     serverActions: true,
   },
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'https://tripath.colivingsoft.site/api/:path*',
-      },
-    ]
-  },
 }
 
 module.exports = nextConfig 
