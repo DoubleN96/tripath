@@ -27,7 +27,12 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(room);
+    const transformedRoom = {
+      ...room,
+      images: room.images.map(image => image.url),
+      amenities: room.amenities.map(amenity => amenity.name),
+    };
+    return NextResponse.json(transformedRoom);
   } catch (error) {
     console.error('Error fetching room:', error);
     return NextResponse.json(

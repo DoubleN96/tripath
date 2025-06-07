@@ -26,7 +26,14 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    return NextResponse.json(rooms);
+    const transformedRooms = rooms.map(room => ({
+      ...room,
+      images: room.images.map(image => image.url),
+      amenities: room.amenities.map(amenity => amenity.name),
+      // Bookings are still included but not typed on client; this is fine for now,
+      // but could be omitted if truly unused: delete room.bookings; or select them out.
+    }));
+    return NextResponse.json(transformedRooms);
   } catch (error) {
     console.error('Error fetching rooms:', error);
     return NextResponse.json(

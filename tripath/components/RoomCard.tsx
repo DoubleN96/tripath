@@ -4,17 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
-
-type Room = {
-  id: string
-  title: string
-  description: string
-  price: number
-  location: string
-  images: string[]
-  amenities: string[]
-  availableFrom: string
-}
+import type { Room } from '@/services/api'
 
 type RoomCardProps = {
   room: Room

@@ -38,7 +38,7 @@ import NextAuth from 'next-auth';
 //   // session: {
 //   //   strategy: 'jwt', // Or 'database'
 //   // },
-//   secret: process.env.NEXTAUTH_SECRET, // Essential: Set this in your .env.local and Vercel env vars
+//   secret: process.env.NEXTAUTH_SECRET!, // Essential: Set this in your .env.local and Vercel env vars
 //   pages: {
 //      signIn: '/auth/signin', // Optional: Path to your custom sign-in page
 //      // error: '/auth/error', // Optional: Path to your custom error page
@@ -70,7 +70,7 @@ const handler = NextAuth({
     // }),
     // It's crucial to have at least one provider configured.
   ],
-  secret: process.env.NEXTAUTH_SECRET, // This is ESSENTIAL. Set in Vercel environment variables.
+  secret: process.env.NEXTAUTH_SECRET!, // This is ESSENTIAL. Set in Vercel environment variables.
   // debug: process.env.NODE_ENV === 'development', // Optional: For more logs during development
 });
 

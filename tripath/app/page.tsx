@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { SearchBar } from "@/components/SearchBar";
 import { RoomGrid } from "@/components/RoomGrid";
-import { Map } from "@/components/Map";
 import { Room } from '@/services/api';
 
 export default function Home() {
