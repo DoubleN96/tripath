@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   images: {
-    domains: ['images.unsplash.com', 'tripath.colivingsoft.site'],
+    domains: ['tripath.colivingsoft.site'],
+  },
+  experimental: {
+    serverActions: true,
   },
 }
 
